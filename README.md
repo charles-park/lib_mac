@@ -5,10 +5,11 @@ mac_server_ctrl을 JIG Lib2.0에 맞게 refactoring.
 
 ODROID Mac Request server control app
 
-### need package
-* ubuntu package : build-essential, git, vim, python3, python3-pip
+### Essential Ubuntu Packages
+* ubuntu package : python3, python3-pip
 * python module : aiohttp, asyncio
 ```
+# python module install
 roor@server:~/# pip install aiohttp asyncio
 ```
 ```
@@ -22,7 +23,7 @@ usage : python3 mac_server_ctl.py [-D | -F][-r | -e] {board name} [-e:mac]
                 -i : server info display
                 -e : erase mac addr [option3 {erase mac addr}]
       [option3] if option2 == -e
-                   Set erase mac address 
+                   Set erase mac address
       e.g) python3 mac_server_ctl.py -D -r m1s   : dev-server control for test
            python3 mac_server_ctl.py -F -r m1s   : factory-server control for product.
            python3 mac_server_ctl.py -D -e m1s 001e06xxxxxx
