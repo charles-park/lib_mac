@@ -29,14 +29,16 @@
 
 #define REQ_TYPE_ERASE          2
 #define REQ_TYPE_ERASE_SIZE     REQ_TYPE_MAC_SIZE
-//------------------------------------------------------------------------------
-// mac_erase
-extern int mac_server_request (const char ctrl_server,
-                        const char req_type,
-                        const char *board,
-                        char *mac_uuid);
 
 //------------------------------------------------------------------------------
-#endif  //  #define __LIB_MAC_H__
+//	function prototype
+//------------------------------------------------------------------------------
+extern int mac_server_request ( const char ctrl_server,
+                                const char req_type,
+                                const char *board,
+                                char *mac_uuid);
+
+//------------------------------------------------------------------------------
+#endif  // #ifndef __LIB_MAC_H__
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
