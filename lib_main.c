@@ -65,6 +65,27 @@ static char *OPT_REQ_BOARD      = "";
 static char *OPT_ERASE_MACADDR  = "";
 static int   OPT_REQ_TYPE       = REQ_TYPE_UNKNOWN;
 
+//------------------------------------------------------------------------------
+// 문자열 변경 함수. 입력 포인터는 반드시 메모리가 할당되어진 변수여야 함.
+//------------------------------------------------------------------------------
+static void tolowerstr (char *p)
+{
+    int i, c = strlen(p);
+
+    for (i = 0; i < c; i++, p++)
+        *p = tolower(*p);
+}
+
+//------------------------------------------------------------------------------
+static void toupperstr (char *p)
+{
+    int i, c = strlen(p);
+
+    for (i = 0; i < c; i++, p++)
+        *p = toupper(*p);
+}
+
+//------------------------------------------------------------------------------
 static void parse_opts (int argc, char *argv[])
 {
     while (1) {
@@ -74,7 +95,6 @@ static void parse_opts (int argc, char *argv[])
             { "board_name", 1, 0, 'B' },
             { "request",    1, 0, 'r' },
             { "erase",      1, 0, 'e' },
-            { "erase",      0, 0, 'h' },
             { NULL, 0, 0, 0 },
         };
         int c;
@@ -105,6 +125,7 @@ static void parse_opts (int argc, char *argv[])
         case 'e':
             OPT_ERASE_MACADDR = optarg;
             OPT_REQ_TYPE = REQ_TYPE_ERASE;	// erase
+            tolowerstr(OPT_ERASE_MACADDR);
             break;
         case 'h':
         default:

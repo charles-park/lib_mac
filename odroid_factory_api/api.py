@@ -30,6 +30,7 @@ class API_MANAGER:
         print(f'Given board: {self.board}')
         print('=' * 50)
 
+
     async def _login_to_api_server(self):
         try:
             async with aiohttp.ClientSession() as session:

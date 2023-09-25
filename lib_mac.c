@@ -35,12 +35,38 @@
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-// debug msg flag
-//#define __LIB_DEBUG_MSG__
+// Debug msg
+//------------------------------------------------------------------------------
+#if defined (__LIB_SINGLE_APP__)
+    #define dbg_msg(fmt, args...)   printf(fmt, ##args)
+#else
+    #define dbg_msg(fmt, args...)
+#endif
 
 #define	MAC_SERVER_CTRL_PYTHON_FILE_NAME	"mac_server_ctrl.py"
 #define CMD_PRINT_WORKING_DIRECTORY         "pwd"
 #define	CMD_LINE_CHARS	128
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// 문자열 변경 함수. 입력 포인터는 반드시 메모리가 할당되어진 변수여야 함.
+//------------------------------------------------------------------------------
+static void tolowerstr (char *p)
+{
+    int i, c = strlen(p);
+
+    for (i = 0; i < c; i++, p++)
+        *p = tolower(*p);
+}
+
+//------------------------------------------------------------------------------
+static void toupperstr (char *p)
+{
+    int i, c = strlen(p);
+
+    for (i = 0; i < c; i++, p++)
+        *p = toupper(*p);
+}
 
 //------------------------------------------------------------------------------
 // return 0 : find success, 1 : not found
@@ -70,14 +96,12 @@ static int find_file_path (const char *fname, char *file_path)
             pclose (fp);
             strncpy (&file_path[strlen(file_path)], &cmd_line[1], strlen(cmd_line)-1);
             file_path[strlen(file_path)-1] = ' ';
-#if defined(__LIB_DEBUG_MSG__)
-    // Display full path (control python file)
-    printf("full path = %s\n", file_path);
-#endif
+            // Display full path (control python file)
+            dbg_msg ("full path = %s\n", file_path);
             return 1;
+        } else {
+            printf ("error, %s file not found!!\n", fname);
         }
-        else
-            printf ("%s file not found!!\n", fname);
     }
     pclose(fp);
     return 0;
@@ -94,25 +118,22 @@ int mac_server_request (const char ctrl_server,
 
     // find python control file
     memset (ctrl_file, 0, sizeof(ctrl_file));
-    if (!find_file_path (MAC_SERVER_CTRL_PYTHON_FILE_NAME, ctrl_file)) {
-        printf ("error, %s file not found!\n", MAC_SERVER_CTRL_PYTHON_FILE_NAME);
+    if (!find_file_path (MAC_SERVER_CTRL_PYTHON_FILE_NAME, ctrl_file))
         return 0;
-    }
 
     // python send command setup
     // python3 ctrl.py [-D|-F] [-r|-e] {board name} [-e:mac_addr]
     memset (cmd_line, 0, sizeof(cmd_line));
-    sprintf(cmd_line, "python3 %s %s %s %s %s\n",
+    sprintf(cmd_line, "python3 %s %s %s %s %s 2>&1\n",
             ctrl_file,
             ctrl_server == MAC_SERVER_FACTORY ? "-F" : "-D",
             req_type    == REQ_TYPE_ERASE     ? "-e" : "-r",
             board,
             req_type    == REQ_TYPE_ERASE     ? mac_uuid : "");
 
-#if defined(__LIB_DEBUG_MSG__)
     // command line display
-    printf("cmd_line : %s\n", cmd_line);
-#endif
+    dbg_msg ("cmd_line : %s\n", cmd_line);
+
     if (NULL != (fp = popen(cmd_line, "r"))) {
         // command buffer init
         memset(cmd_line, 0, sizeof(cmd_line));
@@ -130,10 +151,8 @@ int mac_server_request (const char ctrl_server,
                             */
                             (req_type == REQ_TYPE_UUID) ? (p + 18) : (p),
                             (req_type == REQ_TYPE_UUID) ? REQ_TYPE_UUID_SIZE : REQ_TYPE_MAC_SIZE);
-#if defined(__LIB_DEBUG_MSG__)
-    // Display response msg from python control file.
-    printf("%s\n", p);
-#endif
+                    // Display response msg from python control file.
+                    dbg_msg ("response = %s\n", p);
                 }
                 pclose(fp);
                 return 1;
