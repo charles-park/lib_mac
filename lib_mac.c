@@ -124,7 +124,7 @@ int mac_server_request (const char ctrl_server,
     // python send command setup
     // python3 ctrl.py [-D|-F] [-r|-e] {board name} [-e:mac_addr]
     memset (cmd_line, 0, sizeof(cmd_line));
-    sprintf(cmd_line, "python3 %s %s %s %s %s 2>&1\n",
+    sprintf(cmd_line, "python3 %s %s %s %s %s\n",
             ctrl_file,
             ctrl_server == MAC_SERVER_FACTORY ? "-F" : "-D",
             req_type    == REQ_TYPE_ERASE     ? "-e" : "-r",
@@ -153,6 +153,7 @@ int mac_server_request (const char ctrl_server,
                             (req_type == REQ_TYPE_UUID) ? REQ_TYPE_UUID_SIZE : REQ_TYPE_MAC_SIZE);
                     // Display response msg from python control file.
                     dbg_msg ("response = %s\n", p);
+                    toupperstr (mac_uuid);
                 }
                 pclose(fp);
                 return 1;
