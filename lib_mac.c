@@ -94,11 +94,15 @@ static int find_file_path (const char *fname, char *file_path)
             memset (cmd_line, 0, sizeof(cmd_line));
             fgets  (cmd_line, CMD_LINE_CHARS, fp);
             pclose (fp);
-            strncpy (&file_path[strlen(file_path)], &cmd_line[1], strlen(cmd_line)-1);
-            file_path[strlen(file_path)-1] = ' ';
-            // Display full path (control python file)
-            dbg_msg ("full path = %s\n", file_path);
-            return 1;
+            if (strlen(cmd_line)) {
+                strncpy (&file_path[strlen(file_path)], &cmd_line[1], strlen(cmd_line)-1);
+                file_path[strlen(file_path)-1] = ' ';
+                // Display full path (control python file)
+                dbg_msg ("full path = %s\n", file_path);
+                return 1;
+            }
+            dbg_msg ("file not found.");
+            return 0;
         } else {
             printf ("error, %s file not found!!\n", fname);
         }
