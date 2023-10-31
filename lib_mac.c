@@ -118,7 +118,7 @@ int mac_server_request (const char ctrl_server,
                         char *mac_uuid)
 {
     FILE *fp;
-    char cmd_line[CMD_LINE_CHARS], ctrl_file[64];
+    char cmd_line[CMD_LINE_CHARS *2], ctrl_file[CMD_LINE_CHARS];
 
     // find python control file
     memset (ctrl_file, 0, sizeof(ctrl_file));
