@@ -141,7 +141,7 @@ int mac_server_request (const char ctrl_server,
     if (NULL != (fp = popen(cmd_line, "r"))) {
         // command buffer init
         memset(cmd_line, 0, sizeof(cmd_line));
-        while (fgets(cmd_line, 4096, fp)) {
+        while (fgets(cmd_line, sizeof(cmd_line), fp)) {
             if (strstr(cmd_line, "success") != NULL) {
                 if (req_type != REQ_TYPE_ERASE) {
                     char *p = strstr(cmd_line, "001e06");
