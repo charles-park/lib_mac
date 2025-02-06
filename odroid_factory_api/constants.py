@@ -208,4 +208,11 @@ TABLE_FIELDS_BY_BOARD = {
         'board',
         'uuid',
     ],
+    'c5': [
+        'mac_num',
+        'assigned',
+        'assigned_date',
+        'board',
+        'uuid',
+    ],
 }
